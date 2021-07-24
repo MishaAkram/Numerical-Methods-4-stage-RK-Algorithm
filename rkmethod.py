@@ -1,11 +1,15 @@
+import matplotlib.pyplot as plt
 # Python program to implement Runge Kutta method
 def dydx(x, y):
     return (18 * x + 1.33 * y) / (1.33 * x + 18 * y)
 
+def dydx1(x, y):
+    return (x *1.33 * y**2)
+
 
 # Finds value of y for a given x using step size h
 # and initial value y0 at x0.
-def rungeKutta(x0, y0, x, h, Q=0.5, w=0.5, c1=1, c2=2, c3=3, c4=1):
+def rungeKutta(x0, y0, x, h, Q=0.5, w=0.5, c1=1, c2=2, c3=2, c4=1):
     # Count number of iterations using step size or
     # step height h
     n = (int)((x - x0) / h)
@@ -34,11 +38,48 @@ def rmse(a, b):
 x0 = 0
 y = 18 / 1.33
 x = 18
-h = 0.5
-a = rungeKutta(x0, y, x, h)
-b = rungeKutta(x0, y, x, h, 0.2, 0.2)
-print("The value of y at x is:", a)
-print("The value of y at x is:", b)
-print(rmse(a, b))
+h = 1
+# a = rungeKutta(x0, y, x, 0.0001)
+# b = rungeKutta(x0, y, x,h , 0.2, 0.2,1,1,1,3)
+# print("The value of y at x is:",a)
+# print("The value of y at x is:", b)
+# print(rmse(a, b))
 
+#reducing errors by using modifying values of w,q,ci
+n = [h,h/2,h/4,h/8,h/16]
+def compare():
+    List=[]
+    for i in (n):
+       a=rungeKutta(x0, y, x, h)
+       b=rungeKutta(x0, y, x, 4, 1,0.1,i/10)
+       c=rmse(b,a)
+       print("a = ",a)
+       print("b = ",b)
+       print("c = ",c)
+       List.append(c)
+    print(List)
+    e=rungeKutta(x0,y,x,4,1,(List.index(min(List))+1)/10)
+    print("e = ",e)
+    print(len(List))
+    print("minimum error",min(List),List.index(min(List))+1)
+    return List
 
+# importing the required module
+  
+# x axis values
+y = compare()
+# corresponding y axis values
+  
+# plotting the points 
+plt.plot(n, y)
+  
+# naming the x axis
+plt.xlabel('x - axis')
+# naming the y axis
+plt.ylabel('y - axis')
+  
+# giving a title to my graph
+plt.title('Error Analysis Graph!')
+  
+# function to show the plot
+plt.show()
